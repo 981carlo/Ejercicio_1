@@ -41,3 +41,15 @@ async def create_user(request: Request):
     mycursor.execute(f'INSERT INTO `usuarios`(nombre, apellido) VALUES ("{nombre}","{apellido}")')
     mydb.commit()
     return f'Usuario: {nombre} {apellido}, creado exitosamente.'
+
+@app.put("/users/{id}")
+async def update_user(id: int, request: Request):
+    mydb = make_connection()
+    mycursor = mydb.cursor()
+    data = await request.json()
+    nombre = data['nombre']
+    apellido = data['apellido']
+    
+    mycursor.execute(f'UPDATE `usuarios` SET nombre="{nombre}", apellido="{apellido}" WHERE id={id}')
+    mydb.commit()
+    return f'Usuario con id {id} actualizado exitosamente.'
