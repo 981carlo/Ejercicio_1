@@ -62,3 +62,7 @@ async def delete_user(id: int):
     mycursor.execute(f'DELETE FROM `usuarios` WHERE id={id}')
     mydb.commit()
     return f'Usuario con id {id} eliminado exitosamente.'
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
