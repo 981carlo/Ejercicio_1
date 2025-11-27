@@ -29,3 +29,15 @@ async def get_users():
         
     result = mycursor.fetchall()
     return {"Usuarios": result}
+
+@app.post("/users")
+async def create_user(request: Request):
+    mydb = make_connection()
+    mycursor = mydb.cursor()
+    data = await request.json()
+    nombre = data['nombre']
+    apellido = data['apellido']
+    
+    mycursor.execute(f'INSERT INTO `usuarios`(nombre, apellido) VALUES ("{nombre}","{apellido}")')
+    mydb.commit()
+    return f'Usuario: {nombre} {apellido}, creado exitosamente.'
