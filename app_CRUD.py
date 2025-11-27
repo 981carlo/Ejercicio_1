@@ -15,3 +15,17 @@ def make_connection():
         database="usuarios_spotify"
     )
     return mydb
+
+@app.get("/users")
+async def get_users():
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="2411", 
+        database="usuarios_spotify"
+    )
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM usuarios")
+        
+    result = mycursor.fetchall()
+    return {"Usuarios": result}
