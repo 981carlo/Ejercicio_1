@@ -53,3 +53,12 @@ async def update_user(id: int, request: Request):
     mycursor.execute(f'UPDATE `usuarios` SET nombre="{nombre}", apellido="{apellido}" WHERE id={id}')
     mydb.commit()
     return f'Usuario con id {id} actualizado exitosamente.'
+
+@app.delete("/users/{id}")
+async def delete_user(id: int):
+    mydb = make_connection()
+    mycursor = mydb.cursor()
+    
+    mycursor.execute(f'DELETE FROM `usuarios` WHERE id={id}')
+    mydb.commit()
+    return f'Usuario con id {id} eliminado exitosamente.'
