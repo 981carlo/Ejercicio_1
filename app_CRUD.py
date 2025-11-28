@@ -1,6 +1,5 @@
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
-import mysql.connector
 from configuration.connection import DatabaseConnection
 
 app = FastAPI()
@@ -62,7 +61,7 @@ async def update_user(id: int, request: Request):
 @app.delete("/users/{id}")
 async def delete_user(id: int):
     
-    mydb = make_connection()
+    mydb = await make_connection()
     mycursor = mydb.cursor()
     
     mycursor.execute(f'DELETE FROM `usuarios` WHERE id={id}')
