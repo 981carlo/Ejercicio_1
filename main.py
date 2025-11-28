@@ -12,7 +12,7 @@ redirect_uri = os.getenv('redirect_uri')
 
 app = FastAPI()
 
-@app.get("/bienvenida_spotify")
+@app.get("/")
 async def bienvenida():
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
 
