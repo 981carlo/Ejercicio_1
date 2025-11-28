@@ -31,6 +31,12 @@ async def home():
         return redirect(auth_url)
     return redirect(url_for(''))
 
+@app.get("/callback")
+async def callback():
+    
+    sp_oauth.get_access_token(request.args.get['code'])
+    return redirect_uri(url_for(''))
+
 
     
 
