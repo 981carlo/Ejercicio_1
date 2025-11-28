@@ -1,6 +1,12 @@
+from dotenv import load_dotenv
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 from configuration.connection import DatabaseConnection
+import os
+
+client_id = os.getenv('client_id')
+client_secret = os.getenv('client_secret')  
+redirect_uri = os.getenv('redirect_uri')
 
 app = FastAPI()
 
