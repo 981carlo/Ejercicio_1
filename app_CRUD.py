@@ -1,4 +1,5 @@
 from fastapi import Request, FastAPI
+from fastapi.responses import JSONResponse
 import mysql.connector
 from configuration.connection import DatabaseConnection
 
@@ -9,22 +10,20 @@ async def bienvenida():
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
 
 async def make_connection():
-    
     mydb = DatabaseConnection(
         host="localhost",
         user="root",
         password="2411",
-        database="usuarios_spotify")
-    
-    mydb_conn = mydb.connect_db()
+        database="usuarios_spotify"
+    )
+    mydb_conn = await mydb.connect_db()
     
     return mydb_conn
 
 @app.get("/users")
 async def get_users():
     
-        
-    mydb = make_connection()
+    mydb = await make_connection()    
     mycursor = mydb.cursor()
     
     mycursor.execute("SELECT * FROM usuarios")        
@@ -35,7 +34,7 @@ async def get_users():
 @app.post("/users")
 async def create_user(request: Request):
     
-    mydb = make_connection()
+    mydb = await make_connection()
     mycursor = mydb.cursor()
     data = await request.json()
     nombre = data['nombre']
@@ -44,12 +43,12 @@ async def create_user(request: Request):
     mycursor.execute(f'INSERT INTO `usuarios`(nombre, apellido) VALUES ("{nombre}","{apellido}")')
     mydb.commit()
     
-    return f'Usuario: {nombre} {apellido}, creado exitosamente.'
+    return JSONResponse(content={"message": "Usuario creado exitosamente."}, status_code=201)
 
 @app.put("/users/{id}")
 async def update_user(id: int, request: Request):
     
-    mydb = make_connection()
+    mydb = await make_connection()
     mycursor = mydb.cursor()
     data = await request.json()
     nombre = data['nombre']
