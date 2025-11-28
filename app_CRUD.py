@@ -1,5 +1,6 @@
 from fastapi import Request, FastAPI
 import mysql.connector
+from configuration.connection import DatabaseConnection
 
 app = FastAPI()
 
@@ -7,19 +8,23 @@ app = FastAPI()
 async def bienvenida():
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
 
-def make_connection():
-    mydb = mysql.connector.connect(
+async def make_connection():
+    
+    mydb = DatabaseConnection(
         host="localhost",
         user="root",
         password="2411",
-        database="usuarios_spotify"
-    )
-    return mydb
+        database="usuarios_spotify")
+    
+    mydb_conn = mydb.connect_db()
+    
+    return mydb_conn
 
 @app.get("/users")
 async def get_users():
     
-    mydb = make_connection()    
+        
+    mydb = make_connection()
     mycursor = mydb.cursor()
     
     mycursor.execute("SELECT * FROM usuarios")        

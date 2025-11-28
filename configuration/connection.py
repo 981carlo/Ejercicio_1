@@ -9,7 +9,7 @@ class DatabaseConnection:
         self.database = database
         self.mydb = None
         
-    async def connect(self):
+    async def connect_db(self):
         self.mydb = mysql.connector.connect(
             host=self.host,
             user=self.user,
