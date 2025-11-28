@@ -1,18 +1,20 @@
 import os
-from fastapi import FastAPI, request, redirect, session,url_for
+from fastapi import FastAPI
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
-from spotipy.cache_handler import FastApiSessionCacheHandler
+from spotipy.cache_handler import FlaskSessionCacheHandler
+from urllib3 import request
+from flask import redirect, url_for, session
 
 
 app = FastAPI()
-app.config['SECRET_KEY'] = os.urandom(64)
+app.config['SECRET_KEY'] = os.urandom(24)
 
 client_id = 'a561422a0afb428c994aee4444510435'
 client_secret = 'a7ee5060c288459e8b0b80b1e102c556'
 redirect_uri = 'http://localhost:8000/callback'
 scope = ""
-cache_handler = FastApiSessionCacheHandler(session)
+cache_handler = FlaskSessionCacheHandler(session)
 sp_oauth = SpotifyOAuth(
     client_id=client_id,
     client_secret=client_secret,
