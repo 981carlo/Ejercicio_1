@@ -1,4 +1,7 @@
-import os
+import requests
+
+
+'''import os
 from fastapi import FastAPI
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
@@ -58,4 +61,4 @@ async def logout():
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)
+    uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)'''
