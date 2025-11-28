@@ -24,21 +24,35 @@ sp_oauth = SpotifyOAuth(
 
 sp = Spotify(auth_manager=sp_oauth)
 
-@app.get("/")
-async def home():
+def validate_token():
+    
     if not sp_oauth.validate_token(cache_handler.get_cached_token()):
         auth_url = sp_oauth.get_authorize_url()
         return redirect(auth_url)
     return redirect(url_for(''))
 
+@app.get("/")
+async def home():
+    
+    return validate_token()
+
 @app.get("/callback")
 async def callback():
     
     sp_oauth.get_access_token(request.args.get['code'])
-    return redirect_uri(url_for(''))
+    return redirect(url_for(''))
 
-
+@app.get("/")
+def get():
+    validate_token()
     
+    return
+
+@app.get("/logout")
+async def logout():
+    
+    session.clear()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     import uvicorn
