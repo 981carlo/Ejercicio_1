@@ -19,7 +19,11 @@ data = {'grant_type': 'client_credentials',
 
 oauth_response = requests.post(url, headers=headers, data=data)
 
+# Obtener el token de acceso del response
+
 access_token = oauth_response.json().get('access_token')
+
+# Función para buscar un álbum en Spotify usando la API
 
 def search_album(album_name: str):
     
@@ -34,8 +38,3 @@ def search_album(album_name: str):
     artist_name = response.json()['albums']['items'][0]['artists'][0]['name']
     
     return album_name, artist_name
-
-
-
-
-# https://api.spotify.com
