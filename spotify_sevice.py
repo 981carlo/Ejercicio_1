@@ -1,64 +1,36 @@
+import os
+from dotenv import load_dotenv
 import requests
 
 
-'''import os
-from fastapi import FastAPI
-from spotipy import Spotify
-from spotipy.oauth2 import SpotifyOAuth
-from spotipy.cache_handler import FlaskSessionCacheHandler
-from urllib3 import request
-from flask import redirect, url_for, session
+# Carga de las variables de entorno desde el archivo .env
+load_dotenv()
 
+# Obtener credenciales de la api Spotify desde las variables de entorno
 
-app = FastAPI()
-app.config['SECRET_KEY'] = os.urandom(24)
+client_id = os.getenv('client_id')
+client_secret = os.getenv('client_secret')
 
-client_id = 'a561422a0afb428c994aee4444510435'
-client_secret = 'a7ee5060c288459e8b0b80b1e102c556'
-redirect_uri = 'http://localhost:8000/callback'
-scope = ""
-cache_handler = FlaskSessionCacheHandler(session)
-sp_oauth = SpotifyOAuth(
-    client_id=client_id,
-    client_secret=client_secret,
-    redirect_uri=redirect_uri,
-    scope=scope,
-    cache_handler=cache_handler,
-    show_dialog=True
-)
+url = 'https://accounts.spotify.com/api/token'
+headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+data = {'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret}
 
-sp = Spotify(auth_manager=sp_oauth)
+oauth_response = requests.post(url, headers=headers, data=data)
 
-def validate_token():
+access_token = oauth_response.json().get('access_token')
+
+def search_album(album_name: str):
     
-    if not sp_oauth.validate_token(cache_handler.get_cached_token()):
-        auth_url = sp_oauth.get_authorize_url()
-        return redirect(auth_url)
-    return redirect(url_for(''))
-
-@app.get("/")
-async def home():
+    search_url = 'https://api.spotify.com/v1/search'
+    params = {'type': 'album', 'limit': 1, 'q': album_name}
+    headers = {'Authorization': f'Bearer {access_token}'}
     
-    return validate_token()
-
-@app.get("/callback")
-async def callback():
+    response = requests.get(search_url, headers=headers, params=params)
+    if response.status_code != 200:
+        return {"error": "Error al buscar el artista."}
+    info_artist = response.json()['albums']['items'][0]['name']
     
-    sp_oauth.get_access_token(request.args.get['code'])
-    return redirect(url_for(''))
+    return info_artist
 
-@app.get("/")
-def get():
-    validate_token()
-    
-    return
-
-@app.get("/logout")
-async def logout():
-    
-    session.clear()
-    return redirect(url_for('home'))
-
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)'''
