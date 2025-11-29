@@ -2,20 +2,16 @@ from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 from configuration.connection import DatabaseConnection
 from spotify_sevice import search_album
-import os
 
 app = FastAPI()
 
-@app.get("/search_album/{album_name}")
-async def get_album(album_name: str):
-    album_info = search_album(album_name)
-    return album_info
-
 @app.get("/")
 async def bienvenida():
+    
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
 
 async def make_connection():
+    
     mydb = DatabaseConnection(
         host="localhost",
         user="root",
@@ -25,6 +21,7 @@ async def make_connection():
     mydb_conn = await mydb.connect_db()
     
     return mydb_conn
+
 
 @app.get("/users")
 async def get_users():
@@ -75,6 +72,15 @@ async def delete_user(id: int):
     mydb.commit()
     
     return f'Usuario con id {id} eliminado exitosamente.'
+
+@app.get("/add_album/{album_name}")
+async def get_album(album_name: str):
+    
+    info = search_album(album_name)
+    album_name = info[0]    
+    artist_name = info[1]
+    
+    return (f'El álbum {album_name} del artista {artist_name} ha sido añadido a tu colección.')
 
 if __name__ == '__main__':
     import uvicorn
