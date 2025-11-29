@@ -30,7 +30,12 @@ def search_album(album_name: str):
     response = requests.get(search_url, headers=headers, params=params)
     if response.status_code != 200:
         return {"error": "Error al buscar el artista."}
-    info_artist = response.json()['albums']['items'][0]['name']
+    album_name = response.json()['albums']['items'][0]['name']
+    artist_name = response.json()['albums']['items'][0]['artists'][0]['name']
     
-    return info_artist
+    return album_name, artist_name
 
+
+
+
+# https://api.spotify.com

@@ -1,4 +1,5 @@
 import mysql
+from mysql import connector
 
 
 class DatabaseConnection:
