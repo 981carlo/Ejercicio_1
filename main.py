@@ -23,6 +23,25 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
     client_secret=client_secret
 ))
 
+@app.get("/get_artist")
+async def get_artist_stats(request: Request,artist_id: str = None):
+    try:
+        # Fetch artist data, including monthly listeners and images
+        artist_data = sp.artist(artist_id)
+        monthly_listeners = artist_data["followers"]["total"]
+        artist_name = artist_data["name"]
+        images = artist_data["images"]
+
+        artist_info = {
+            "artist_name": artist_name,
+            "monthly_listeners": monthly_listeners,
+            "images": images
+        }
+        
+        return ("artist.html", {"request": request, "data": artist_info})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
+
 @app.get("/")
 async def bienvenida():
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
