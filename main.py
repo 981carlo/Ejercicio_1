@@ -17,6 +17,11 @@ client_secret = os.getenv('client_secret')
 redirect_uri = os.getenv('redirect_uri')
 scope = os.getenv('scope')
 
+# Iniciar el cliente de Spotify
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
+    client_id=client_id,
+    client_secret=client_secret
+))
 
 @app.get("/")
 async def bienvenida():
