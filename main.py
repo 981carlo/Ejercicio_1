@@ -1,16 +1,22 @@
 from dotenv import load_dotenv
-load_dotenv()
-
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 from configuration.connection import DatabaseConnection
 import os
 
+# Carga de las variables de entorno desde el archivo .env
+load_dotenv()
+
+app = FastAPI()
+
+# Obtener credenciales de la api Spotify desde las variables de entorno
 client_id = os.getenv('client_id')
 client_secret = os.getenv('client_secret')  
 redirect_uri = os.getenv('redirect_uri')
+scope = os.getenv('scope')
 
-app = FastAPI()
 
 @app.get("/")
 async def bienvenida():
