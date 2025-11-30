@@ -1,7 +1,0 @@
-/venv
-/Configuration
-/__pycache__
-.env
-*.pyc
-*.pyo
-
