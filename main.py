@@ -19,7 +19,7 @@ async def make_connection():
         database="usuarios_spotify"
     )
     mydb_conn = await mydb.connect_db()
-    
+        
     return mydb_conn
 
 
@@ -73,14 +73,22 @@ async def delete_user(id: int):
     
     return f'Usuario con id {id} eliminado exitosamente.'
 
-@app.get("/add_album/{album_name}")
-async def get_album(album_name: str):
+@app.get("/add_album/{id}/{album_name}")
+async def get_album(id: int, album_name: str):
     
     info = search_album(album_name)
     album_name = info[0]    
     artist_name = info[1]
+
+    mydb = await make_connection()
+    mycursor = mydb.cursor()
+    
+    mycursor.execute(f'UPDATE `usuarios` SET album_favorito="{album_name}", artista_favorito="{artist_name}" WHERE id={id}')
+    mydb.commit()
     
     return (f'El álbum {album_name} del artista {artist_name} ha sido añadido a tu colección.')
+
+    
 
 if __name__ == '__main__':
     import uvicorn
