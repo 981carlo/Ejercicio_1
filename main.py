@@ -1,14 +1,16 @@
-from fastapi import Request, FastAPI
+from fastapi import Request, FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from configuration.connection import DatabaseConnection
 from spotify_sevice import search_album
 
 app = FastAPI()
 
+
 @app.get("/")
 async def bienvenida():
     
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
+
 
 async def make_connection():
     
@@ -18,8 +20,7 @@ async def make_connection():
         password="2411",
         database="usuarios_spotify"
     )
-    mydb_conn = await mydb.connect_db()
-        
+    mydb_conn = await mydb.connect_db()        
     return mydb_conn
 
 
@@ -30,9 +31,9 @@ async def get_users():
     mycursor = mydb.cursor()
     
     mycursor.execute("SELECT * FROM usuarios")        
-    result = mycursor.fetchall()
-    
+    result = mycursor.fetchall()    
     return {"Usuarios": result}
+
 
 @app.post("/users")
 async def create_user(request: Request):
@@ -45,8 +46,8 @@ async def create_user(request: Request):
     
     mycursor.execute(f'INSERT INTO `usuarios`(nombre, apellido) VALUES ("{nombre}","{apellido}")')
     mydb.commit()
-    
     return JSONResponse(content={"message": "Usuario creado exitosamente."}, status_code=201)
+
 
 @app.put("/users/{id}")
 async def update_user(id: int, request: Request):
@@ -58,9 +59,9 @@ async def update_user(id: int, request: Request):
     apellido = data['apellido']
     
     mycursor.execute(f'UPDATE `usuarios` SET nombre="{nombre}", apellido="{apellido}" WHERE id={id}')
-    mydb.commit()
-    
-    return f'Usuario con id {id} actualizado exitosamente.'
+    mydb.commit()    
+    return JSONResponse(f'"message": Usuario con id {id} actualizado exitosamente.', status_code=201)
+
 
 @app.delete("/users/{id}")
 async def delete_user(id: int):
@@ -71,12 +72,18 @@ async def delete_user(id: int):
     mycursor.execute(f'DELETE FROM `usuarios` WHERE id={id}')
     mydb.commit()
     
-    return f'Usuario con id {id} eliminado exitosamente.'
+    return JSONResponse(f'"message": Usuario con id {id} eliminado exitosamente.', status_code=201)
+
 
 @app.get("/add_album/{id}/{album_name}")
 async def get_album(id: int, album_name: str):
     
     info = search_album(album_name)
+    
+    if "error" in info:
+        
+        raise HTTPException(status_code=404, detail="Album no encontrado")
+    
     album_name = info[0]    
     artist_name = info[1]
 
@@ -84,9 +91,8 @@ async def get_album(id: int, album_name: str):
     mycursor = mydb.cursor()
     
     mycursor.execute(f'UPDATE `usuarios` SET album_favorito="{album_name}", artista_favorito="{artist_name}" WHERE id={id}')
-    mydb.commit()
-    
-    return (f'El álbum {album_name} del artista {artist_name} ha sido añadido a tu colección.')
+    mydb.commit()    
+    return JSONResponse(content=f'El álbum {album_name} del artista {artist_name} ha sido añadido a tu colección.', status_code=200)
 
     
 

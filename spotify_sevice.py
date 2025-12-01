@@ -33,7 +33,7 @@ def search_album(album_name: str):
     
     response = requests.get(search_url, headers=headers, params=params)
     if response.status_code != 200:
-        return {"error": "Error al buscar el artista."}
+        return {"error": "Error al buscar el album."}
     album_name = response.json()['albums']['items'][0]['name']
     artist_name = response.json()['albums']['items'][0]['artists'][0]['name']
     
