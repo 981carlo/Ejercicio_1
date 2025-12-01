@@ -1,6 +1,6 @@
 Proyecto de Backend con Python y fastAPI para conectar una base de datos de usuarios con la API de Spotify.
 
-Para hacer uso de la API hay que introducir las credenciales de Spotify (client_id y client_secret) en el archivo .env en las correspondientes variables.
+Para hacer uso de la API hay que introducir las credenciales de Spotify en las correspondientes variables (client_id y client_secret) del archivo .env.
 
 Disponemos de una base de datos en local (usuarios_spotify) con una tabla (suaarios) que cuenta con los campos: id, nombre, apellido, album_favorito y artista_favorito. Se ha implementado un CRUD para poder añadir, consultar, modificar y borrar usuarios.
 
