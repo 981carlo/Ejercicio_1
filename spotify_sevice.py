@@ -24,6 +24,7 @@ oauth_response = requests.post(url, headers=headers, data=data)
 access_token = oauth_response.json().get('access_token')
 
 # Función para buscar un álbum en Spotify usando la API
+# En el parámetro "q" debemos introducir el album que deseamos buscar
 
 def search_album(album_name: str):
     
