@@ -6,24 +6,27 @@ from spotify_sevice import search_album
 app = FastAPI()
 
 
+# MENSAJE DE BIENVENIDA
 @app.get("/")
 async def bienvenida():
     
     return "¡Bienvenidoas a nuestra API de Spotyfy!"
 
 
+# HAY QUE PASAR LOS VALORES DE "user" Y "password" PARA CONECTER CON LA BASE DE DATOS LOCAL
 async def make_connection():
     
     mydb = DatabaseConnection(
         host="localhost",
-        user="root",
-        password="2411",
+        user="",
+        password="",
         database="usuarios_spotify"
     )
     mydb_conn = await mydb.connect_db()        
     return mydb_conn
 
 
+# ENDPOINT PARA LISTAR USUARIOS
 @app.get("/users")
 async def get_users():
     
@@ -35,6 +38,7 @@ async def get_users():
     return {"Usuarios": result}
 
 
+# ENDPOINT PARA AÑADIR USUARIOS
 @app.post("/users")
 async def create_user(request: Request):
     
@@ -49,6 +53,7 @@ async def create_user(request: Request):
     return JSONResponse(content={"message": "Usuario creado exitosamente."}, status_code=201)
 
 
+# ENDPOINT PARA MODIFICAR USUARIOS
 @app.put("/users/{id}")
 async def update_user(id: int, request: Request):
     
@@ -63,6 +68,7 @@ async def update_user(id: int, request: Request):
     return JSONResponse(f'"message": Usuario con id {id} actualizado exitosamente.', status_code=201)
 
 
+# ENDPOINT PARA BORRAR USUARIOS 
 @app.delete("/users/{id}")
 async def delete_user(id: int):
     
@@ -75,6 +81,7 @@ async def delete_user(id: int):
     return JSONResponse(f'"message": Usuario con id {id} eliminado exitosamente.', status_code=201)
 
 
+# ENDPOINT PARA BUSCAR ALBUM FAVORITO Y AÑADIRLO AL USUARIO PASADO POR "id"
 @app.get("/add_album/{id}/{album_name}")
 async def get_album(id: int, album_name: str):
     
