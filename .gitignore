@@ -3,5 +3,4 @@
 *.pyc
 *.pyo
 .cache
-.env
 
