@@ -18,8 +18,8 @@ async def make_connection():
     
     mydb = DatabaseConnection(
         host="localhost",
-        user="",
-        password="",
+        user="root",
+        password="2411",
         database="usuarios_spotify"
     )
     mydb_conn = await mydb.connect_db()        
@@ -48,6 +48,9 @@ async def create_user(request: Request):
     nombre = data['nombre']
     apellido = data['apellido']
     
+    if not isinstance(nombre, str) or not isinstance(apellido, str):
+        raise HTTPException(status_code=404, detail='El nombre y el apellido deben ser strings')
+    
     mycursor.execute(f'INSERT INTO `usuarios`(nombre, apellido) VALUES ("{nombre}","{apellido}")')
     mydb.commit()
     return JSONResponse(content={"message": "Usuario creado exitosamente."}, status_code=201)
@@ -62,6 +65,9 @@ async def update_user(id: int, request: Request):
     data = await request.json()
     nombre = data['nombre']
     apellido = data['apellido']
+    
+    if not isinstance(nombre, str) or not isinstance(apellido, str):
+        raise HTTPException(status_code=404, detail='El nombre y el apellido deben ser strings')
     
     mycursor.execute(f'UPDATE `usuarios` SET nombre="{nombre}", apellido="{apellido}" WHERE id={id}')
     mydb.commit()    
@@ -99,6 +105,7 @@ async def get_album(id: int, album_name: str):
     
     mycursor.execute(f'UPDATE `usuarios` SET album_favorito="{album_name}", artista_favorito="{artist_name}" WHERE id={id}')
     mydb.commit()    
+    
     return JSONResponse(content=f'El álbum {album_name} del artista {artist_name} ha sido añadido a tu colección.', status_code=200)
 
     
