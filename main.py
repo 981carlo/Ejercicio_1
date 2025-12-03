@@ -71,7 +71,7 @@ async def update_user(id: int, request: Request):
     
     mycursor.execute(f'UPDATE `usuarios` SET nombre="{nombre}", apellido="{apellido}" WHERE id={id}')
     mydb.commit()    
-    return JSONResponse(f'"message": Usuario con id {id} actualizado exitosamente.', status_code=201)
+    return JSONResponse(f'Usuario con id {id} actualizado exitosamente.', status_code=201)
 
 
 # ENDPOINT PARA BORRAR USUARIOS 
@@ -84,7 +84,7 @@ async def delete_user(id: int):
     mycursor.execute(f'DELETE FROM `usuarios` WHERE id={id}')
     mydb.commit()
     
-    return JSONResponse(f'"message": Usuario con id {id} eliminado exitosamente.', status_code=201)
+    return JSONResponse(f'Usuario con id {id} eliminado exitosamente.', status_code=201)
 
 
 # ENDPOINT PARA BUSCAR ALBUM FAVORITO Y AÑADIRLO AL USUARIO PASADO POR "id"
