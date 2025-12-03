@@ -18,8 +18,8 @@ async def make_connection():
     
     mydb = DatabaseConnection(
         host="localhost",
-        user="root",
-        password="2411",
+        user="",
+        password="",
         database="usuarios_spotify"
     )
     mydb_conn = await mydb.connect_db()        
